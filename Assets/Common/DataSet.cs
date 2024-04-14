@@ -6,6 +6,10 @@ using UnityEngine;
 
     public class Dataset
     {
+        public Data[] m_training_data;
+        public Data[] m_validation_data;
+        public Data[] m_test_data;
+
         public class Data
         {
             //data from MNIST dataset
@@ -31,9 +35,6 @@ using UnityEngine;
             }
         }
         
-        public Data[] m_training_data;
-        public Data[] m_validation_data;
-        public Data[] m_test_data;
 
         Data LoadData(byte[] data, ref int pos)
         {

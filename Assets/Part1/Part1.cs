@@ -98,29 +98,33 @@ public class Part1 : MonoBehaviour
             }
         }
         
-        public double[] FeedForward(Dataset.Data data)
+public double[] FeedForward(Dataset.Data data)
+{
+    //start with activations from the inputs
+    double[] current_activations = data.m_inputs;
+    
+    //feed forward through the network
+    for (int layer = 0; layer < m_sizes.Length - 1; layer++)
+    {
+        //get biases and weights for this layer
+        double[] biases = m_biases[layer];
+        double[][] weights = m_weights[layer];
+        
+        //calculate the new activations
+        int layer_size = m_sizes[layer + 1];
+        double[] new_activations = new double[layer_size];
+        for (int neuron = 0; neuron < layer_size; neuron++)
         {
-            //start with activations from the inputs
-            double[] current_activations = data.m_inputs;
-            
-            //feed forward through the network
-            for (int layer = 0; layer < m_sizes.Length - 1; layer++)
-            {
-                //get biases and weights for this layer
-                double[] biases = m_biases[layer];
-                double[][] weights = m_weights[layer];
-                
-                //calculate the new activations
-                double[] new_activations = new double[m_sizes[layer + 1]];
-                for (int neuron = 0; neuron < m_sizes[layer + 1]; neuron++)
-                    new_activations[neuron] = Sigmoid(biases[neuron] + Dot(weights[neuron], current_activations));
-                
-                //store them
-                current_activations = new_activations;
-            }
-
-            return current_activations;
+            new_activations[neuron] = Sigmoid(biases[neuron]
+                                              + Dot(weights[neuron], current_activations));
         }
+
+        //store them
+        current_activations = new_activations;
+    }
+
+    return current_activations;
+}
         
 
     }
@@ -171,18 +175,18 @@ public class Part1 : MonoBehaviour
             Destroy(m_current_texture);
     }
 
-    public static double Sigmoid(double z)
-    {
-        return 1.0 / (1.0 + Math.Exp(-z));
-    }
+public static double Sigmoid(double z)
+{
+    return 1.0 / (1.0 + Math.Exp(-z));
+}
 
-    public static double Dot(double[] a, double[] b)
-    {
-        double res = 0;
-        for (int i = 0; i < a.Length; i++)
-            res += a[i]*b[i];
-        return res;
-    }
+public static double Dot(double[] a, double[] b)
+{
+    double res = 0;
+    for (int i = 0; i < a.Length; i++)
+        res += a[i]*b[i];
+    return res;
+}
     
     public static int MaxIndex(double[] a)
     {
